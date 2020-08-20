@@ -19,11 +19,12 @@ export default {
     },
     computed: {
         icon() {
-            return "fa-angle-left"
+            return this.$store.isMenuVisible ? "fa-angle-left" : "fa-angle-down" 
         }
     },
     methods: {
         toggleMenu() {
+            this.$store.commit('toggleMenu')
             
         }    
     }
