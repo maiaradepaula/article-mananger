@@ -42,7 +42,7 @@ export default {
     .stat-icon i {
         font-size: 5rem;
     }
-    
+
     .stat-info {
         flex: 1;
         display: flex;
