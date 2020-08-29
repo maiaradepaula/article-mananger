@@ -2,18 +2,18 @@ import Vue from 'vue'
 import Toasted from 'vue-toasted'
 
 Vue.use(Toasted, {
-    iconPack: 'fontwesome',
+    iconPack: 'fontawesome',
     duration: 3000
 })
 
 Vue.toasted.register(
-    'defaultSucess',
-    payload => !payload.msg ? 'Operação realizada com sucesso !' : payload.msg,
-    { type: 'sucess', icon: 'check'}
+    'defaultSuccess',
+    payload => !payload.msg ? 'Operação realidada com sucesso!' : payload.msg,
+    { type: 'success', icon: 'check' }
 )
 
 Vue.toasted.register(
-    'defautError',
-    payload => !payload.msg ? 'Ops.. Erro inesperado.' : payload.msg,
-    { type: 'error', icon: 'times'}
+    'defaultError',
+    payload => !payload.msg ? 'Oops.. Erro inesperado.' : payload.msg,
+    { type : 'error', icon : 'times' }
 )
