@@ -8,3 +8,5 @@ const error = err => {
         return Promise.reject(err)
     }
 }
+
+axios.interceptors.response.use(success, error)
