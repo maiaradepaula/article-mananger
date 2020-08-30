@@ -70,7 +70,7 @@ export default {
 
     .menu .tree-node.selected > .tree-content,
     .menu .tree-node .tree-content:hover {
-        background-color: rgba(255, 255, 255, 0.2);
+        background-color: rgba(104, 104, 104, 0.2);
     }
 
     .tree-arrow.has-child {
@@ -80,7 +80,9 @@ export default {
     .menu .menu-filter {
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: center; 
+
+        
 
         margin: 20px;
         padding-bottom: 8px;
