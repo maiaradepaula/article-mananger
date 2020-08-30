@@ -8,16 +8,16 @@
             <i class="fa fa-angle-down"></i>
         </div>
         <div class="user-dropdown-content">
-            <router-link to="/admin">
-            <i class="fa fa-cogs"></i> Administração 
+            <router-link to="/admin" v-if="user.admin">
+                <i class="fa fa-cogs"></i> Administração
             </router-link>
-            <a href @click.prevent="logout"><i class="fa fa-sign-out"></i> Sair </a>
+            <a href @click.prevent="logout"><i class="fa fa-sign-out"></i> Sair</a>
         </div>
     </div>
 </template>
 
 <script>
-import { userkey } from '@/global'
+import { userKey } from '@/global'
 import { mapState } from 'vuex'
 import Gravatar from 'vue-gravatar'
 
@@ -25,11 +25,11 @@ export default {
     name: 'UserDropdown',
     components: { Gravatar },
     computed: mapState(['user']),
-    methods: { 
+    methods: {
         logout() {
-            localStorage.removeItem(userkey)
+            localStorage.removeItem(userKey)
             this.$store.commit('setUser', null)
-            this.$store.push({ name: 'auth'})
+            this.$router.push({ name: 'auth' })
         }
     }
 }
@@ -40,13 +40,14 @@ export default {
         position: relative;
         height: 100%;
     }
+
     .user-button {
         display: flex;
         align-items: center;
         color: #fff;
         font-weight: 100;
         height: 100%;
-        padding: 0px 20px; 
+        padding: 0px 20px;
     }
 
     .user-dropdown:hover {
@@ -54,19 +55,21 @@ export default {
     }
 
     .user-dropdown-img {
-        margin: 0px 10px; 
+        margin: 0px 10px;
     }
+
     .user-dropdown-img > img {
         max-height: 37px;
         border-radius: 5px;
     }
+
 
     .user-dropdown-content {
         position: absolute;
         right: 0px;
         background-color: #f9f9f9;
         min-width: 170px;
-        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
         padding: 10px;
         z-index: 1;
 
@@ -76,7 +79,7 @@ export default {
 
         visibility: hidden;
         opacity: 0;
-        transition: visibility 0, opacity 0.5s linear;
+        transition: visibility 0s, opacity 0.5s linear;
     }
 
     .user-dropdown:hover .user-dropdown-content {
@@ -84,7 +87,7 @@ export default {
         opacity: 1;
     }
 
-    .user-dropdown-content a{
+    .user-dropdown-content a {
         text-decoration: none;
         color: #000;
         padding: 10px;
@@ -96,4 +99,3 @@ export default {
         background-color: #EDEDED;
     }
 </style>
-
