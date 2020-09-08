@@ -14,6 +14,9 @@
                     <b-tab title="Usuários">
                         <UserAdmin />
                     </b-tab>
+                    <b-tab title="Idiomas">
+                        <LanguageAdmin />
+                    </b-tab>
                 </b-tabs>
             </b-card>
         </div>
@@ -21,17 +24,17 @@
 </template>
 
 <script>
-import PageTitle from '../template/PageTitle'
-import ArticleAdmin from './ArticleAdmin'
-import CategoryAdmin from './CategoryAdmin'
-import UserAdmin from './UserAdmin'
+import PageTitle from "../template/PageTitle";
+import ArticleAdmin from "./ArticleAdmin";
+import CategoryAdmin from "./CategoryAdmin";
+import UserAdmin from "./UserAdmin";
+import LanguageAdmin from "./LanguageAdmin"
 
 export default {
-    name: 'AdminPages',
-    components: { PageTitle, ArticleAdmin, CategoryAdmin, UserAdmin }
-}
+  name: "AdminPages",
+  components: { PageTitle, ArticleAdmin, CategoryAdmin, UserAdmin, LanguageAdmin },
+};
 </script>
 
 <style>
-
 </style>
