@@ -50,4 +50,15 @@ module.exports = app => {
     app.route('/stats')
         .all(app.config.passport.authenticate())
         .get(app.api.stat.get)
+
+    app.route('/languages')
+        .all(app.config.passport.authenticate())
+        .post(admin(app.api.language.save))
+        .get(admin(app.api.language.get))
+
+    app.route('/languages/:id')
+        .all(app.config.passport.authenticate())
+        .put(admin(app.api.language.save))
+        .get(admin(app.api.language.getById))
+        .delete(admin(app.api.language.remove))
 }

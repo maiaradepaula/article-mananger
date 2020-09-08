@@ -10,6 +10,8 @@ exports.up = function(knex, Promise) {
             .inTable('users').notNull()
         table.integer('categoryId').references('id')
             .inTable('categories').notNull()
+        table.integer('languageId').references('id')
+            .integer('languages').notNull()
     })
 };
 
