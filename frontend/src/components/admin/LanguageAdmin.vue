@@ -4,22 +4,22 @@
             <input id="language-id" type="hidden" v-model="language.id"/>
             <b-row>
                 <b-col md="4" sm="12">
-                    <b-form-group label="Idioma:" label-for="language-idioma">
-                        <b-form-input id="language.idioma" type="text"
-                        v-model="language.idioma" required
+                    <b-form-group label="Idioma:" label-for="language-idiom">
+                        <b-form-input id="language-idiom" type="text"
+                        v-model="language.idiom" required
                         placeholder="Informe o Idioma..." />
                     </b-form-group>
                 </b-col>
                 <b-col md="4" sm="12">
                     <b-form-group label="Local:" label-for="language-country">
-                        <b-form-input id="language.country" type="text"
+                        <b-form-input id="language-country" type="text"
                         v-model="language.country" required
                         placeholder="Informe o País do Idioma.." />
                     </b-form-group>
                 </b-col>
                 <b-col md="4" sm="12">
                     <b-form-group label="Código Idioma:" label-for="language-acronym">
-                        <b-form-input id="language.acronym" type="text"
+                        <b-form-input id="language-acronym" type="text"
                         v-model="language.acronym" required
                         placeholder="Informe o Código do Idioma.." />
                     </b-form-group>
@@ -59,11 +59,11 @@ export default {
     };
   },
   methods: {
-    loadLanguages() {
-      const url = `${baseApiUrl}/languages`;
-      axios.get(url).then((res) => {
-        this.languages = res.data;
-      })
+        loadLanguages() {
+            const url = `${baseApiUrl}/languages`
+            axios.get(url).then(res => {
+                this.languages = res.data
+        })
     },
     reset () {
         this.mode = 'save'
