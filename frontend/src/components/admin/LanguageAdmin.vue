@@ -34,7 +34,16 @@
             </b-row>
         </b-form>
         <hr>
-        <b-table hover striped :items="languages" :fields='fields'></b-table>
+        <b-table hover striped :items="languages" :fields='fields'>
+         <template slot="actions" slot-scope="data">
+                <b-button variant="warning" @click="loadLanguage(data.item)" class="mr-2">
+                    <i class="fa fa-pencil"></i>
+                </b-button>
+                <b-button variant="danger" @click="loadLanguage(data.item, 'remove')">
+                    <i class="fa fa-trash"></i>
+                </b-button>
+            </template>
+        </b-table>
     </div>
 </template>
 
@@ -59,38 +68,45 @@ export default {
     };
   },
   methods: {
-        loadLanguages() {
-            const url = `${baseApiUrl}/languages`
-            axios.get(url).then(res => {
-                this.languages = res.data
+    loadLanguages() {
+      const url = `${baseApiUrl}/languages`;
+      axios.get(url).then((res) => {
+        this.languages = res.data;
+      })
+    },
+    reset() {
+      this.mode = "save";
+      this.language = {};
+      this.loadLanguages();
+    },
+    save() {
+      const method = this.language.id ? "put" : "post";
+      const id = this.language.id ? `/${this.language.id}` : "";
+      axios[method](`${baseApiUrl}/languages${id}`, this.language)
+        .then(() => {
+          this.$toasted.global.defaultSuccess();
+          this.reset();
         })
+        .catch(showError);
     },
-    reset () {
-        this.mode = 'save'
-        this.language = {}
+    remove() {
+    const id = this.language.id
+    axios.delete(`${baseApiUrl}/languages/${id}`)
+      .then(() => {
+        this.$toasted.global.defaultSuccess();
+        this.reset();
+      })
+      .catch(showError)
+    },
+     loadLanguage(language, mode = 'save') {
+            this.mode = mode
+            this.language = { ...language }
+    },
+  },
+     mounted() {
         this.loadLanguages()
-    },
-        save() {
-            const method = this.language.id ? 'put' : 'post'
-            const id = this.language.id ? `/${this.language.id}` : ''
-            axios[method](`${baseApiUrl}/languages${id}`, this.language)
-                .then(() => {
-                    this.$toasted.global.defaultSuccess()
-                    this.reset()
-                })
-                .catch(showError)
-    }},
-        remove() {
-            const id = this.language.id
-            axios.delete(`${baseApiUrl}/languages/${id}`)
-                .then(() => {
-                    this.$toasted.global.defaultSuccess()
-                    this.reset()
-                })
-                .catch(showError)
-  },
-  mounted() {
-    this.loadLanguages();
-  },
+    }
+  
 }
 </script>
+

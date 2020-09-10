@@ -32,19 +32,18 @@ module.exports = app => {
     }
     const remove = async (req, res) => {
         try {
-            existsOrError(req.params.id, 'Código do Idioma não informado.')
-
-            const articles = await app.db('articles')
-                .where({ languageId: req.params.id })
-            notExistsOrError(articles, 'Idioma está vinculado à artigos.')
-
             const rowsDeleted = await app.db('languages')
                 .where({ id: req.params.id }).del()
-            existsOrError(rowsDeleted, 'Idioma não foi encontrado.')
+            
+            try {
+                existsOrError(rowsDeleted, 'Idioma não foi encontrado.')
+            } catch(msg) {
+                return res.status(400).send(msg)    
+            }
 
             res.status(204).send()
-        } catch (msg) {
-            res.status(400).send(msg)
+        } catch(msg) {
+            res.status(500).send(msg)
         }
     }
     const get = (req, res) => {
