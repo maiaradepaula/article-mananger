@@ -12,6 +12,7 @@ exports.up = function(knex, Promise) {
             .inTable('categories').notNull()
         table.integer('languageId').references('id')
             .integer('languages').notNull()
+            
     })
 };
 

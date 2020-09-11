@@ -8,6 +8,10 @@
                     :readonly="mode === 'remove'"
                     placeholder="Informe o Nome do Artigo..." />
             </b-form-group>
+            <b-form-group label="Tipo de Artigo:">
+                <b-form-radio v-model="selected" name="aticle-type" value="1">Texto</b-form-radio>
+                <b-form-radio v-model="selected" name="aticle-type" value="2">Vídeo</b-form-radio>
+            </b-form-group>
             <b-form-group label="Descrição" label-for="article-description">
                 <b-form-input id="article-description" type="text"
                     v-model="article.description" required
@@ -22,7 +26,7 @@
                     placeholder="Informe a URL da Imagem..." />
             </b-form-group>
             <b-form-group v-if="mode === 'save'" 
-                label="Categoria:" label-for="article-categoryId">
+                label="Categoria:"  label-for="article-categoryId">
                 <b-form-select id="article-categoryId"
                     :options="categories" v-model="article.categoryId" />
             </b-form-group>
@@ -30,6 +34,19 @@
                 label="Autor:" label-for="article-userId">
                 <b-form-select id="article-userId"
                     :options="users" v-model="article.userId" />
+            </b-form-group>
+             <b-form-group v-if="mode === 'save'" 
+                label="Idioma:" label-for="article-languageId">
+                <b-form-select id="article-languageId"
+                    :options="languages" v-model="article.languageId" />
+                </b-form-group>
+            <b-form-group label="Legenda Disponível:">
+            <b-form-checkbox-group
+                id="article-legend"
+                v-model="article.languageId"
+                :options="languages"
+                name="article-legend"
+            ></b-form-checkbox-group>
             </b-form-group>
             <b-form-group v-if="mode === 'save'"
                 label="Conteúdo" label-for="article-content">
@@ -58,99 +75,116 @@
 </template>
 
 <script>
-import { VueEditor } from "vue2-editor"
-import { baseApiUrl, showError } from '@/global'
-import axios from 'axios'
+import { VueEditor } from "vue2-editor";
+import { baseApiUrl, showError } from "@/global";
+import axios from "axios";
 
 export default {
-    name: 'ArticleAdmin',
-    components: { VueEditor },
-    data: function() {
-        return {
-            mode: 'save',
-            article: {},
-            articles: [],
-            categories: [],
-            users: [],
-            page: 1,
-            limit: 0,
-            count: 0,
-            fields: [
-                { key: 'id', label: 'Código', sortable: true },
-                { key: 'name', label: 'Nome', sortable: true },
-                { key: 'description', label: 'Descrição', sortable: true },
-                { key: 'actions', label: 'Ações' }
-            ]
-        }
+  name: "ArticleAdmin",
+  components: { VueEditor },
+  data: function() {
+    return {
+      mode: "save",
+      selected: "",
+      article: {},
+      articles: [],
+      categories: [],
+      users: [],
+      languages: [],
+      page: 1,
+      limit: 0,
+      count: 0,
+      fields: [
+        { key: "id", label: "Código", sortable: true },
+        { key: "name", label: "Nome", sortable: true },
+        { key: "description", label: "Descrição", sortable: true },
+        { key: "actions", label: "Ações" },
+      ],
+      selecteds: [],
+    };
+  },
+  methods: {
+    loadArticles() {
+      const url = `${baseApiUrl}/articles?page=${this.page}`;
+      axios.get(url).then((res) => {
+        this.articles = res.data.data;
+        this.count = res.data.count;
+        this.limit = res.data.limit;
+      });
     },
-    methods: {
-        loadArticles() {
-            const url = `${baseApiUrl}/articles?page=${this.page}`
-            axios.get(url).then(res => {
-                this.articles = res.data.data
-                this.count = res.data.count
-                this.limit = res.data.limit
-            })
-        },
-        reset() {
-            this.mode = 'save'
-            this.article = {}
-            this.loadArticles()
-        },
-        save() {
-            const method = this.article.id ? 'put' : 'post'
-            const id = this.article.id ? `/${this.article.id}` : ''
-            axios[method](`${baseApiUrl}/articles${id}`, this.article)
-                .then(() => {
-                    this.$toasted.global.defaultSuccess()
-                    this.reset()
-                })
-                .catch(showError)
-        },
-        remove() {
-            const id = this.article.id
-            axios.delete(`${baseApiUrl}/articles/${id}`)
-                .then(() => {
-                    this.$toasted.global.defaultSuccess()
-                    this.reset()
-                })
-                .catch(showError)
-        },
-        loadArticle(article, mode = 'save') {
-            this.mode = mode
-            axios.get(`${baseApiUrl}/articles/${article.id}`)
-                .then(res => this.article = res.data)
-        },
-        loadCategories() {
-            const url = `${baseApiUrl}/categories`
-            axios.get(url).then(res => {
-                this.categories = res.data.map(category => {
-                    return { value: category.id, text: category.path }
-                })
-            })
-        },
-        loadUsers() {
-            const url = `${baseApiUrl}/users`
-            axios.get(url).then(res => {
-                this.users = res.data.map(user => {
-                    return { value: user.id, text: `${user.name} - ${user.email}` }
-                })
-            })
-        }
+    reset() {
+      this.mode = "save";
+      this.article = {};
+      this.loadArticles();
     },
-    watch: {
-        page() {
-            this.loadArticles()
-        }
+    save() {
+      const method = this.article.id ? "put" : "post";
+      const id = this.article.id ? `/${this.article.id}` : "";
+      axios[method](`${baseApiUrl}/articles${id}`, this.article)
+        .then(() => {
+          this.$toasted.global.defaultSuccess();
+          this.reset();
+        })
+        .catch(showError);
     },
-    mounted() {
-        this.loadUsers()
-        this.loadCategories()
-        this.loadArticles()
-    }
-}
+    remove() {
+      const id = this.article.id;
+      axios
+        .delete(`${baseApiUrl}/articles/${id}`)
+        .then(() => {
+          this.$toasted.global.defaultSuccess();
+          this.reset();
+        })
+        .catch(showError);
+    },
+    loadArticle(article, mode = "save") {
+      this.mode = mode;
+      axios
+        .get(`${baseApiUrl}/articles/${article.id}`)
+        .then((res) => (this.article = res.data));
+    },
+    loadCategories() {
+      const url = `${baseApiUrl}/categories`;
+      axios.get(url).then((res) => {
+        this.categories = res.data.map((category) => {
+          return { value: category.id, text: category.path };
+        });
+      });
+    },
+
+    loadLanguages() {
+      const url = `${baseApiUrl}/languages`;
+      axios.get(url).then((res) => {
+        this.languages = res.data.map((language) => {
+          return {
+            value: language.id,
+            text: `${language.idiom} - ${language.acronym}`,
+          };
+        });
+      });
+    },
+    loadUsers() {
+      const url = `${baseApiUrl}/users`;
+      axios.get(url).then((res) => {
+        this.users = res.data.map((user) => {
+          return { value: user.id, text: `${user.name} - ${user.email}` };
+        });
+      });
+    },
+  },
+  watch: {
+    page() {
+      this.loadArticles();
+    },
+  },
+  mounted() {
+    this.loadUsers();
+    this.loadCategories();
+    this.loadArticles();
+    this.loadLanguages();
+  },
+};
 </script>
 
 <style>
-
 </style>
