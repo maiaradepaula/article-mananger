@@ -1,7 +1,8 @@
 
 exports.up = function(knex, Promise) {
-    return knex.schema.createTable('articles', table => {
+    return knex.schema.alterTable('articles', table => {
         table.increments('id').primary()
+        table.string('type').notNull()
         table.string('name').notNull()
         table.string('description', 1000).notNull()
         table.string('imageUrl', 1000)
@@ -11,11 +12,11 @@ exports.up = function(knex, Promise) {
         table.integer('categoryId').references('id')
             .inTable('categories').notNull()
         table.integer('languageId').references('id')
-            .integer('languages').notNull()
-            
+            .inTable('languages').notNull()
+          
     })
 };
 
 exports.down = function(knex, Promise) {
-    return knex.schema.dropTable('articles')
+    return knex.schema.alterTable('articles')
 };

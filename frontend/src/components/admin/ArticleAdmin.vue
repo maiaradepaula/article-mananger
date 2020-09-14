@@ -6,7 +6,7 @@
                 <b-form-input id="article-name" type="text"
                     v-model="article.name" required
                     :readonly="mode === 'remove'"
-                    placeholder="Informe o Nome do Artigo..." />
+                    placeholder="Informe o Nome do Artigo..." /> 
             </b-form-group>
             <b-form-group label="Tipo de Artigo:">
                 <b-form-radio v-model="selected" name="aticle-type" value="1">Texto</b-form-radio>
@@ -40,7 +40,7 @@
                 <b-form-select id="article-languageId"
                     :options="languages" v-model="article.languageId" />
                 </b-form-group>
-            <b-form-group label="Legenda Disponível:">
+             <b-form-group label="Legenda Disponível:">
             <b-form-checkbox-group
                 id="article-legend"
                 v-model="article.languageId"
@@ -100,7 +100,7 @@ export default {
         { key: "description", label: "Descrição", sortable: true },
         { key: "actions", label: "Ações" },
       ],
-      selecteds: [],
+   selecteds: [],
     };
   },
   methods: {
