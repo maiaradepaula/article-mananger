@@ -8,10 +8,14 @@
                     :readonly="mode === 'remove'"
                     placeholder="Informe o Nome do Artigo..." /> 
             </b-form-group>
-            <b-form-group label="Tipo de Artigo:">
-                <b-form-radio v-model="selected" name="aticle-type" value="1">Texto</b-form-radio>
-                <b-form-radio v-model="selected" name="aticle-type" value="2">Vídeo</b-form-radio>
-            </b-form-group>
+                <b-form-group label="Radios using options">
+               <b-form-radio-group
+                id="radio-group-1"
+                v-model="article.type"
+                :options="articleTypes"
+                name="radio-options"
+              ></b-form-radio-group>
+                </b-form-group> 
             <b-form-group label="Descrição" label-for="article-description">
                 <b-form-input id="article-description" type="text"
                     v-model="article.description" required
@@ -40,14 +44,16 @@
                 <b-form-select id="article-languageId"
                     :options="languages" v-model="article.languageId" />
                 </b-form-group>
-             <b-form-group label="Legenda Disponível:">
+             <b-form-group label="Legenda Disponível:"> -->
             <b-form-checkbox-group
-                id="article-legend"
-                v-model="article.languageId"
+                id="subtitles-legend"
+                v-model="article.subtitles"
                 :options="languages"
-                name="article-legend"
-            ></b-form-checkbox-group>
-            </b-form-group>
+                name="subtitles-legend"
+            ></b-form-checkbox-group> 
+
+          {{ article.subtitles}} 
+             </b-form-group> 
             <b-form-group v-if="mode === 'save'"
                 label="Conteúdo" label-for="article-content">
                 <VueEditor v-model="article.content"
@@ -58,6 +64,7 @@
             <b-button variant="danger" v-if="mode === 'remove'"
                 @click="remove">Excluir</b-button>
             <b-button class="ml-2" @click="reset">Cancelar</b-button>
+              {{ article }}
         </b-form>
         <hr>
         <b-table hover striped :items="articles" :fields="fields">
@@ -67,8 +74,8 @@
                 </b-button>
                 <b-button variant="danger" @click="loadArticle(data.item, 'remove')">
                     <i class="fa fa-trash"></i>
-                </b-button>
-            </template>
+                </b-button>             
+        </template>
         </b-table>
         <b-pagination size="md" v-model="page" :total-rows="count" :per-page="limit" />
     </div>
@@ -85,8 +92,12 @@ export default {
   data: function() {
     return {
       mode: "save",
-      selected: "",
-      article: {},
+      articleTypes: [
+        { key: 1, value: "A"},
+        { key: 2, value: "B"}
+      ],
+      article: {subtitles: []},
+    
       articles: [],
       categories: [],
       users: [],
@@ -100,7 +111,6 @@ export default {
         { key: "description", label: "Descrição", sortable: true },
         { key: "actions", label: "Ações" },
       ],
-   selecteds: [],
     };
   },
   methods: {

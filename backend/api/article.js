@@ -24,10 +24,25 @@ module.exports = app => {
                 .then(_ => res.status(204).send())
                 .catch(err => res.status(500).send(err))
         } else {
+            let { subtitles } = article;
+            
+            delete article.subtitles;
             app.db('articles')
-                .insert(article)
-                .then(_ => res.status(204).send())
+                .insert(article).returning("id")
+                .then(res => {
+                    console.log(res[0]);
+
+
+                    
+                    res.status(204).send()
+                }
+                    )
                 .catch(err => res.status(500).send(err))
+
+
+                subtitles.forEach(subtitle => {
+                    console.log(subtitle)
+                })
         }
     }
 
