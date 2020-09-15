@@ -8,7 +8,7 @@
                     :readonly="mode === 'remove'"
                     placeholder="Informe o Nome do Artigo..." /> 
             </b-form-group>
-                <b-form-group label="Radios using options">
+                <b-form-group v-if="mode === 'save'" label="Tipo de Publicação:">
                <b-form-radio-group
                 id="radio-group-1"
                 v-model="article.type"
@@ -44,28 +44,33 @@
                 <b-form-select id="article-languageId"
                     :options="languages" v-model="article.languageId" />
                 </b-form-group>
-             <b-form-group label="Legenda Disponível:"> -->
-            <b-form-checkbox-group
+             <b-form-group v-if="mode === 'save'"
+                label="Legenda Disponível:"> 
+            <b-form-checkbox-group 
                 id="subtitles-legend"
                 v-model="article.subtitles"
                 :options="languages"
                 name="subtitles-legend"
             ></b-form-checkbox-group> 
-
-          {{ article.subtitles}} 
              </b-form-group> 
-            <b-form-group v-if="mode === 'save'"
+            <b-form-group v-if="mode === 'save'" v-show="article.type === 'A'"
                 label="Conteúdo" label-for="article-content">
                 <VueEditor v-model="article.content"
                     placeholder="Informe o Conteúdo do Artigo..." />
+            </b-form-group>
+            <b-form-group v-if="mode === 'save'" v-show="article.type === 'B'"
+                label="Video (URL):" label-for="article-videoUrl">
+                <b-form-input id="article-videoUrl" type="text"
+                    v-model="article.videoUrl" required
+                    :readonly="mode === 'remove'"
+                    placeholder="Informe a URL do Vídeo..." />
             </b-form-group>
             <b-button variant="primary" v-if="mode === 'save'"
                 @click="save">Salvar</b-button>
             <b-button variant="danger" v-if="mode === 'remove'"
                 @click="remove">Excluir</b-button>
             <b-button class="ml-2" @click="reset">Cancelar</b-button>
-              {{ article }}
-        </b-form>
+            </b-form>
         <hr>
         <b-table hover striped :items="articles" :fields="fields">
             <template slot="actions" slot-scope="data">
@@ -93,8 +98,8 @@ export default {
     return {
       mode: "save",
       articleTypes: [
-        { key: 1, value: "A"},
-        { key: 2, value: "B"}
+        { text:"Texto", value: "A"},
+        { text:"Vídeo", value: "B"}
       ],
       article: {subtitles: []},
     

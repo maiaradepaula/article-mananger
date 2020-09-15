@@ -32,34 +32,21 @@ module.exports = app => {
                 .then(result => {
 
 
-                       subtitles.forEach(subtitle => {
+                    subtitles.forEach(subtitle => {
 
 
-                        console.log(subtitle,result[0])
+
                         app.db('subtitles')
-                            .insert({articleId: result[0], subtitlesId:subtitle})
+                            .insert({ articleId: result[0], subtitlesId: subtitle })
                             .catch(err => res.status(500).send(err))
-                        
+
                     })
 
-                   
+
                     res.status(204).send()
-                
+
                 })
-               // .then(res => {
 
-                    // subtitles.forEach(subtitle => {
-
-
-                    //     console.log(subtitle, res[0])
-                    //     app.db('subtitles')
-                    //         .insert({articleId: res[0], subtitlesId:subtitle})
-                    //         .catch(err => res.status(500).send(err))
-                        
-                    // })
-
-                    //res.status(204).send()
-              //  })
                 .catch(err => res.status(500).send(err))
 
 
