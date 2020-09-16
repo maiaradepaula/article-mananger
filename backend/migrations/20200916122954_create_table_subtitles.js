@@ -1,9 +1,8 @@
-
 exports.up = function(knex, Promise) 
     {return knex.schema.createTable('subtitles', table => {
     table.integer('articleId').references('id')
         .inTable('articles')
-    table.integer('subtitlesId').references('id')
+    table.integer('subtitleId').references('id')
         .inTable('languages')
 })
 };

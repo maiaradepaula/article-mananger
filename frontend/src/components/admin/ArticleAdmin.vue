@@ -102,7 +102,6 @@ export default {
         { text:"Vídeo", value: "B"}
       ],
       article: {subtitles: []},
-    
       articles: [],
       categories: [],
       users: [],

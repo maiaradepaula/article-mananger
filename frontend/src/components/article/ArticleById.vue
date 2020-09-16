@@ -1,7 +1,8 @@
 <template>
     <div class="article-by-id">
-        <PageTitle icon="fa fa-file-o" :main="article.name" :sub="article.description" />
+        <PageTitle icon="fa fa-file-o" :main="article.name" :sub="article.description" :sub2="article.type" />
         <div class="article-content" v-html="article.content"></div>
+        <div class="article-content" v-html="article.videoUrl"></div>
     </div>
 </template>
 

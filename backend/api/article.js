@@ -12,7 +12,7 @@ module.exports = app => {
             existsOrError(article.description, 'Descrição não informada')
             existsOrError(article.categoryId, 'Categoria não informada')
             existsOrError(article.userId, 'Autor não informado')
-            existsOrError(article.content, 'Conteúdo não informado')
+
         } catch (msg) {
             res.status(400).send(msg)
         }
@@ -31,17 +31,12 @@ module.exports = app => {
                 .insert(article).returning("id")
                 .then(result => {
 
-
                     subtitles.forEach(subtitle => {
 
-
-
                         app.db('subtitles')
-                            .insert({ articleId: result[0], subtitlesId: subtitle })
+                            .insert({ articleId: result[0], subtitleId: subtitle })
                             .catch(err => res.status(500).send(err))
-
                     })
-
 
                     res.status(204).send()
 
@@ -102,10 +97,12 @@ module.exports = app => {
         const categories = await app.db.raw(queries.categoryWithChildren, categoryId)
         const ids = categories.rows.map(c => c.id)
 
-        app.db({ a: 'articles', u: 'users' })
-            .select('a.id', 'a.name', 'a.description', 'a.imageUrl', { author: 'u.name' })
+        app.db({ a: 'articles', u: 'users', l:'languages' })
+            .select('a.id', 'a.name', 'a.description', 'a.imageUrl', 'a.type', 'l.idiom',
+             { author: 'u.name' })
             .limit(limit).offset(page * limit - limit)
-            .whereRaw('?? = ??', ['u.id', 'a.userId'])
+            .whereRaw('?? = ??', ['u.id', 'a.userId']) 
+            .whereRaw('?? = ??', ['l.id', 'a.languageId'])
             .whereIn('categoryId', ids)
             .orderBy('a.id', 'desc')
             .then(articles => res.json(articles))
