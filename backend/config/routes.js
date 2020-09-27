@@ -51,6 +51,11 @@ module.exports = app => {
         .all(app.config.passport.authenticate())
         .get(app.api.stat.get)
 
+    app.route('/subtitles/:id')
+        .all(app.config.passport.authenticate())
+        .get(admin(app.api.subtitle.getById))
+      
+
     app.route('/languages')
         .all(app.config.passport.authenticate())
         .post(admin(app.api.language.save))

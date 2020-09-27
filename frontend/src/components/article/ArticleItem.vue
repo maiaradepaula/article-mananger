@@ -1,6 +1,6 @@
 <template>
     <div class="article-item">
-        <router-link :to="{ name: 'articleById', params: { id: article.id } }">
+     
             <div class="article-item-image d-none d-sm-block">
                 <img v-if="article.imageUrl"
                     :src="article.imageUrl"
@@ -13,7 +13,7 @@
                 <h2>{{ article.name }}</h2>
                 <p>{{ article.description }}</p>
                 <span class="article-item-type">
-                    <strong>Tipo: </strong>{{ article.type }}
+                    <strong>Tipo: </strong>{{ article.type=='A' ?'Texto' :'Vídeo'}}
                 </span>
                 <span class="article-item-idiom">
                     <strong>Idioma: </strong>{{ article.idiom }}
@@ -22,48 +22,46 @@
                 <span class="article-item-author">
                     <strong>Autor: </strong>{{ article.author }}
                 </span>
+                <div>
+                 <ul class="list-group-horizontal"> <strong>Legendas Disponíveis: </strong>
+                 <b-list-group-item  v-for="subtitle in subtitles" :key="subtitle.idiom" >
+                     {{ subtitle.idiom }}
+                     <i class="fa fa-globe"></i>
+                </b-list-group-item> 
+                </ul> 
+                 </div>
+
             </div>
-        </router-link>
+    
     </div>
 </template>
 
 <script>
-import { baseApiUrl } from '@/global'
-import axios from 'axios'
+import { baseApiUrl } from "@/global";
+import axios from "axios";
 
 export default {
   name: "ArticleItem",
   props: ["article"],
 
-data: function() {
-        return {
-            subtitles: [],
-        }
-    },
+  data: function() {
+    return {
+      subtitles: [],
+    };
+  },
   methods: {
-        getArticle() {
-            const url = `${baseApiUrl}/article/${this.article.id}`
-            axios(url).then(res => this.article = res.data)
-        },
-        getSubtitle() {
-            const url = `${baseApiUrl}/article/${this.article.id}/subtitles`
-            axios(url).then(res => this.subtitles = res.data)        
-        }
+    getSubtitles() {
+      const url = `${baseApiUrl}/subtitles/${this.article.id}`;
+      axios(url).then((res) => (this.subtitles = res.data));
+      
     },
-    watch: {
-        $route(to) {
-            this.article.id = to.params.id
-            this.subtitles = []
-            this.getArticles()
-            this.getSubtitle()
-        }
-    },
-    mounted() {
-        this.article.id = this.$route.params.id
-        this.getArticles()
-        this.getSubtitle()
-    }
-}
+  },
+
+  mounted() {
+  
+    this.getSubtitles();
+  },
+};
 </script>
 
 <style>
@@ -108,4 +106,16 @@ data: function() {
   color: #555;
   font-size: 1.1rem;
 }
+
+.list-group-horizontal .list-group-item {
+    display: inline-block;
+}
+.list-group-horizontal .list-group-item {
+    margin-left: 20px;
+    border-top-right-radius:4px;
+    border-bottom-left-radius:4px;
+    border-right-width: 1px;
+
+}
+
 </style>
